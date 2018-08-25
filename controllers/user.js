@@ -11,7 +11,7 @@ function prueba(req, res) {
 function saveUser(req, res) {
     let params = req.body;
     let user = new User();
-    if (params.name && params.lastName && params.email && params.password) {
+    if (params.name && params.email && params.password) {
         user.name = params.name,
             user.lastName = params.lastName,
             user.email = params.email,
@@ -20,9 +20,9 @@ function saveUser(req, res) {
         user.image = null
         //control user duplicated
         User.find({ email: user.email.toLowerCase() }).exec((err, users) => {
-            if (err) { return res.status(500).send({ message: 'Error en la peticion  de usuarios' }) }
+            if (err) { return res.status(500).send({ message: 'Error in the request users' }) }
             if (users && users.length >= 1) {
-                return res.status(404).send({ message: 'El usuario ya existe' })
+                return res.status(404).send({ message: 'User already exists' })
             } else {
                 bcrypt.hash(params.password, null, null, (err, hash) => {
                     user.password = hash;
@@ -34,9 +34,9 @@ function saveUser(req, res) {
                                 return res.status(500).send({ message: "Failed to save data" });
                             }
                             if (userStored) {
-                                res.status(200).send({ user: userStored });
+                                res.status(200).send({ user: userStored, token: jwt.createToken(userStored) });
                             } else {
-                                res.status(404).send({ message: "No se ha registrado el usuario" });
+                                res.status(404).send({ message: "User has not registered" });
                             }
                         }
                     );
@@ -45,7 +45,7 @@ function saveUser(req, res) {
         })
 
     } else {
-        res.status(200).send({ message: "Envía todos los datos" });
+        res.status(403).send({ message: "Some data is required" });
     }
 }
 
@@ -56,7 +56,7 @@ function loginUser(req, res) {
 
     User.findOne({ email: email }, (err, user) => {
         if (err) {
-            return res.status(500).send({ message: 'Error en la petición' })
+            return res.status(500).send({ message: 'Error in the request' })
         }
 
         if (user) {
@@ -69,17 +69,55 @@ function loginUser(req, res) {
                         return res.status(200).send({ user })
                     }
                 } else {
-                    return res.status(404).send({ message: 'El usuario no se ha podido identificar' })
+                    return res.status(404).send({ message: 'User has not been able to identify, invalid password' })
                 }
             })
         } else {
-            return res.status(404).send({ message: 'El usuario no se ha podido identificar' })
+            return res.status(404).send({ message: 'User not found' })
         }
+    })
+
+}
+
+function updateUser(req, res) {
+    let userId = req.params.id
+    let update = req.body
+
+    delete update.password
+
+    if (userId != req.user.sub) {
+        return res.status(500).send({ message: 'You do not have permissions to update the user data' })
+    }
+
+    User.findByIdAndUpdate(userId, update, { new: true }, (err, userUpdated) => {
+        if (err) return res.status(500).send({ message: 'Error in the request' })
+        if (!userUpdated) return res.status(404).send({ message: 'User could not be updated' })
+        userUpdated.password=undefined
+        return res.status(200).send({ user: userUpdated })
+    })
+}
+
+function deleteUser(req, res) {
+    let userId = req.params.id
+    let update = req.body
+
+    delete update.password
+
+    if (userId != req.user.sub) {
+        return res.status(500).send({ message: 'No tienes permisos para actualizar los datos del usuario' })
+    }
+
+    User.findByIdAndRemove(userId, (err, userDeleted) => {
+        if (err) return res.status(500).send({ message: 'Error en la petición' })
+        if (!userDeleted) return res.status(404).send({ message: 'No se ha podido Eliminar el usuario' })
+        return res.status(200).send({ user: userDeleted })
     })
 }
 
 module.exports = {
     prueba,
     saveUser,
-    loginUser
+    loginUser,
+    updateUser,
+    deleteUser
 };
