@@ -3,6 +3,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require('../services/jwt')
+const fs=require('fs')
+const path = require('path')
 
 function prueba(req, res) {
     return res.status(200).send({ message: 'Hello' })
@@ -93,7 +95,7 @@ function updateUser(req, res) {
         if (err) return res.status(500).send({ message: 'Error in the request' })
         if (!userUpdated) return res.status(404).send({ message: 'User could not be updated' })
         userUpdated.password=undefined
-        return res.status(200).send({ user: userUpdated })
+        return res.status(200).send({ user: userUpdated,token:jwt.createToken(userUpdated) })
     })
 }
 
@@ -114,10 +116,68 @@ function deleteUser(req, res) {
     })
 }
 
+function uploadImage(req, res) {
+    let userId = req.params.id
+    if (req.files) {
+        console.log('file>>>>>>>>>:' ,req.files);
+
+        let file_split = req.files.image.path.split('\/')
+        console.log(file_split);
+        let file_name = file_split[2]
+        console.log('name: ', file_name);
+        if (userId != req.user.sub) {
+            removeFile(res, req.files.image.path, 'No tienes permisos para actualizar los datos del usuario')
+        } else {
+            if (req.files.image.type == 'image/png' || req.files.image.type == 'image/jpg' || req.files.image.type == 'image/jpeg' || req.files.image.type == 'image/ggif') {
+                User.findByIdAndUpdate(userId, { image: file_name }, { new: true }, (err, userUpdate) => {
+                    if (err) {
+                        res.status(500).send({ message: 'Error en la petición' })
+                    } else {
+                        if (!userUpdate) {
+                            res.status(404).send({ message: 'No se ha podido actualizar el usuario' })
+                        } else if (userUpdate) {
+                            res.status(200).send({ user: userUpdate })
+                        }
+                    }
+                })
+            } else {
+                removeFile(res, req.files.image.path, 'Extencion no valida')
+            }
+        }
+
+    }
+    else {
+        res.status(404).send({ message: 'Not files' })
+    }
+}
+
+
+function removeFile(res, file_path, message) {
+    fs.unlink(file_path, (err) => {
+        if (!err) {
+            res.status(200).send({ message: message })
+        }
+    })
+}
+
+function getImageFile(req, res) {
+    let image_file = req.params.imageFile
+    let path_file = './uploads/users/' + image_file
+    fs.exists(path_file, (exist) => {
+        if (exist) {
+            res.sendFile(path.resolve(path_file))
+        } else {
+            res.status(200).send({ message: 'No existe la imágen' })
+        }
+    })
+}
+
 module.exports = {
     prueba,
     saveUser,
     loginUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    uploadImage,
+    getImageFile
 };
