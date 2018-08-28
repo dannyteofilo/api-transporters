@@ -7,7 +7,8 @@ const app = express()
 
 //Load routes
 let user_routes = require('./routes/user')
-let vehicle_routes=require('./routes/vehicle')
+let vehicle_routes = require('./routes/vehicle')
+let driver_routes = require('./routes/drivers.js')
 
 
 //middlewares
@@ -28,7 +29,8 @@ app.use(bodyParser.json())
 
 //routes
 app.use('/api', user_routes)
-app.use('/api',vehicle_routes)
+app.use('/api', vehicle_routes)
+app.use('/api',driver_routes)
 
 //exports
 

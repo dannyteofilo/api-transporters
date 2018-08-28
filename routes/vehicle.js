@@ -13,9 +13,9 @@ let md_auth = require("../middlewares/authenticated");
 api.post("/vehicle",md_auth.ensureAuth, vehicleCtrl.saveVehicle);
 api.get("/vehicles",md_auth.ensureAuth,vehicleCtrl.getVehicles);
 api.put('/vehicle/:id',md_auth.ensureAuth,vehicleCtrl.updateVehicle)
+api.delete('/vehicle/:id',md_auth.ensureAuth,vehicleCtrl.deleteVehicle)
 // api.post("/login", userCtrl.loginUser);
 // api.put('/update-user/:id',md_auth.ensureAuth,userCtrl.updateUser)
-// api.delete('/user/:id',md_auth.ensureAuth,userCtrl.deleteUser)
 
 
 module.exports = api;

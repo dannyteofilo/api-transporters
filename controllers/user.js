@@ -3,7 +3,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require('../services/jwt')
-const fs=require('fs')
+const fs = require('fs')
 const path = require('path')
 
 function prueba(req, res) {
@@ -14,11 +14,11 @@ function saveUser(req, res) {
     let params = req.body;
     let user = new User();
     if (params.name && params.email && params.password) {
-        user.name = params.name,
-            user.lastName = params.lastName,
-            user.email = params.email,
-            user.password = params.password,
-            user.role = 'ROLE_USER'
+        user.name = params.name
+        user.lastName = params.lastName
+        user.email = params.email
+        user.password = params.password
+        user.role = 'ROLE_USER'
         user.image = null
         //control user duplicated
         User.find({ email: user.email.toLowerCase() }).exec((err, users) => {
@@ -94,8 +94,8 @@ function updateUser(req, res) {
     User.findByIdAndUpdate(userId, update, { new: true }, (err, userUpdated) => {
         if (err) return res.status(500).send({ message: 'Error in the request' })
         if (!userUpdated) return res.status(404).send({ message: 'User could not be updated' })
-        userUpdated.password=undefined
-        return res.status(200).send({ user: userUpdated,token:jwt.createToken(userUpdated) })
+        userUpdated.password = undefined
+        return res.status(200).send({ user: userUpdated, token: jwt.createToken(userUpdated) })
     })
 }
 
@@ -119,7 +119,7 @@ function deleteUser(req, res) {
 function uploadImage(req, res) {
     let userId = req.params.id
     if (req.files) {
-        console.log('file>>>>>>>>>:' ,req.files);
+        console.log('file>>>>>>>>>:', req.files);
 
         let file_split = req.files.image.path.split('\/')
         console.log(file_split);
