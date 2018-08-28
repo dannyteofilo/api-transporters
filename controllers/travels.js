@@ -1,6 +1,6 @@
 "use strict";
 
-const Travel = require("../models/travels.js");
+const Travel = require("../models/travels");
 
 
 

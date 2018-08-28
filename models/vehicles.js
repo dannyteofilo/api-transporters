@@ -13,4 +13,4 @@ let vehicleSchema = Schema({
     driverId:String
 });
 
-module.exports = mongoose.model("Vehicles", vehicleSchema);
+module.exports = mongoose.model("Vehicle", vehicleSchema);

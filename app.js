@@ -9,6 +9,7 @@ const app = express()
 let user_routes = require('./routes/user')
 let vehicle_routes = require('./routes/vehicle')
 let driver_routes = require('./routes/drivers.js')
+let travels_routes = require('./routes/travels')
 
 
 //middlewares
@@ -30,7 +31,8 @@ app.use(bodyParser.json())
 //routes
 app.use('/api', user_routes)
 app.use('/api', vehicle_routes)
-app.use('/api',driver_routes)
+app.use('/api', driver_routes)
+app.use('/api', travels_routes)
 
 //exports
 

@@ -3,15 +3,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-let driverSchema = Schema({
-    nameOrigin: String,
-    nameDestination: String,
+let travelSchema = Schema({
+    addressOrigin: String,
+    addressDestination: String,
     latOrigin: String,
-    lngDestination: String,
+    lngOrogin: String,
     latDestination: String,
     lngDestination: String,
     vehilcelId:String,
     driverId:String
 });
 
-module.exports = mongoose.model("Driver", driverSchema);
+module.exports = mongoose.model("Travel", travelSchema);

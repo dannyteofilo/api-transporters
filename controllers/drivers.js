@@ -1,6 +1,6 @@
 "use strict";
 
-const Driver = require("../models/vehicles");
+const Driver = require("../models/drivers");
 
 
 
