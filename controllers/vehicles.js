@@ -18,7 +18,7 @@ function saveVehicle(req, res) {
         vehicle.status = params.status
         vehicle.driverId = params.driverId
         //control vehicle duplicated
-        Vehicle.find({ plates: vehicle.plates.toLowerCase() }).exec((err, vehicles) => {
+        Vehicle.find({ plates: vehicle.plates}).exec((err, vehicles) => {
             if (err) { return res.status(500).send({ message: 'Error in the request vehicle' }) }
             if (vehicles && vehicles.length >= 1) {
                 return res.status(404).send({ message: 'Vehicle already exists' })
@@ -27,11 +27,12 @@ function saveVehicle(req, res) {
                     (err,
                         vehicleStored) => {
                         console.log('vehicletored: ', vehicleStored);
+                        console.log('Erro: ',err);
                         if (err) {
                             return res.status(500).send({ message: "Failed to save data" });
                         }
                         if (vehicleStored) {
-                            res.status(200).send({ data: vehicleStored });
+                            res.status(200).send({ message: 'Vehicle has been created' });
                         } else {
                             res.status(404).send({ message: "Vehicle has not registered" });
                         }
@@ -65,7 +66,7 @@ function updateVehicle(req, res) {
         if (err) return res.status(500).send({ message: 'Error in the request' })
         if (!vehicleUpdated) return res.status(404).send({ message: 'Vehicle could not be updated' })
         vehicleUpdated.password = undefined
-        return res.status(200).send({ data: vehicleUpdated })
+        return res.status(200).send({ message: 'Vehicle has been updated' })
     })
 }
 

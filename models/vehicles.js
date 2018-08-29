@@ -9,7 +9,7 @@ let vehicleSchema = Schema({
     soat: Date,
     brand: String,
     model: String,
-    status: Number,
+    status: Boolean,
     driverId:String
 });
 
