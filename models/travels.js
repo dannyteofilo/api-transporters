@@ -7,7 +7,7 @@ let travelSchema = Schema({
     addressOrigin: String,
     addressDestination: String,
     latOrigin: String,
-    lngOrogin: String,
+    lngOrigin: String,
     latDestination: String,
     lngDestination: String,
     vehilcelId:String,
