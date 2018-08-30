@@ -7,7 +7,6 @@ const Travel = require("../models/travels");
 function saveTravel(req, res) {
     let params = req.body;
     let travel = new Travel();
-    console.log(params);
 
     if (params.addressOrigin && params.addressDestination) {
         travel.addressOrigin = params.addressOrigin
@@ -27,7 +26,6 @@ function saveTravel(req, res) {
                 travel.save(
                     (err,
                         travelStored) => {
-                        console.log('traveltored: ', travelStored);
                         if (err) {
                             return res.status(500).send({ message: "Failed to save data" });
                         }

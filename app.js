@@ -10,6 +10,7 @@ let user_routes = require('./routes/user')
 let vehicle_routes = require('./routes/vehicle')
 let driver_routes = require('./routes/drivers.js')
 let travels_routes = require('./routes/travels')
+let stats_routes = require('./routes/stats')
 
 
 //middlewares
@@ -33,6 +34,7 @@ app.use('/api', user_routes)
 app.use('/api', vehicle_routes)
 app.use('/api', driver_routes)
 app.use('/api', travels_routes)
+app.use('/api', stats_routes)
 
 //exports
 

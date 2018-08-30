@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
 let driverSchema = Schema({
     name: String,
     lastName: String,
-    email: String,
-    password: String,
+    numDocument: Number,
+    typeDocument: String,
     role: String,
     image: String,
     vehicleId:String

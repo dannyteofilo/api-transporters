@@ -6,32 +6,30 @@ const Driver = require("../models/drivers");
 
 function saveDriver(req, res) {
     let params = req.body;
-    let vehicle = new Driver();
-    console.log(params);
+    let driver = new Driver();
 
-    if (params.type && params.plates && params.brand && params.model) {
-        vehicle.type = params.type
-        vehicle.plates = params.plates
-        vehicle.soat = params.soat
-        vehicle.brand = params.brand
-        vehicle.model = params.model
-        vehicle.status = params.status
-        vehicle.driverId = params.driverId
+    if (params.name && params.lastName && params.numDocument && params.typeDocument) {
+        driver.name = params.name
+        driver.lastName = params.lastName
+        driver.numDocument = params.numDocument
+        driver.typeDocument = params.typeDocument
+        driver.role = params.role
+        driver.image = params.image
+        driver.vehicleId = params.vehicleId
         //control vehicle duplicated
-        Driver.find({ plates: vehicle.plates.toLowerCase() }).exec((err, vehicles) => {
+        Driver.find({ numDocument: driver.numDocument }).exec((err, drivers) => {
             if (err) { return res.status(500).send({ message: 'Error in the request' }) }
-            if (vehicles && vehicles.length >= 1) {
+            if (drivers && drivers.length >= 1) {
                 return res.status(404).send({ message: 'Driver already exists' })
             } else {
-                vehicle.save(
+                driver.save(
                     (err,
-                        vehicleStored) => {
-                        console.log('vehicletored: ', vehicleStored);
+                        driverStored) => {
                         if (err) {
                             return res.status(500).send({ message: "Failed to save data" });
                         }
-                        if (vehicleStored) {
-                            res.status(200).send({ data: vehicleStored });
+                        if (driverStored) {
+                            res.status(200).send({ message: 'Driver has been registered' });
                         } else {
                             res.status(404).send({ message: "Driver has not registered" });
                         }
@@ -64,7 +62,7 @@ function updateDriver(req, res) {
     Driver.findByIdAndUpdate(driverId, update, { new: true }, (err, driverUpdated) => {
         if (err) return res.status(500).send({ message: 'Error in the request' })
         if (!driverUpdated) return res.status(404).send({ message: 'Driver could not be updated' })
-        return res.status(200).send({ data: driverUpdated })
+        return res.status(200).send({ message: 'Driver has been updated' })
     })
 }
 

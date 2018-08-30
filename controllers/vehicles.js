@@ -7,7 +7,6 @@ const Vehicle = require("../models/vehicles");
 function saveVehicle(req, res) {
     let params = req.body;
     let vehicle = new Vehicle();
-    console.log(params);
 
     if (params.type && params.plates && params.brand && params.model) {
         vehicle.type = params.type
@@ -26,8 +25,6 @@ function saveVehicle(req, res) {
                 vehicle.save(
                     (err,
                         vehicleStored) => {
-                        console.log('vehicletored: ', vehicleStored);
-                        console.log('Erro: ',err);
                         if (err) {
                             return res.status(500).send({ message: "Failed to save data" });
                         }
