@@ -31,7 +31,6 @@ function saveUser(req, res) {
                     user.save(
                         (err,
                             userStored) => {
-                            console.log('userStored: ', userStored);
                             if (err) {
                                 return res.status(500).send({ message: "Failed to save data" });
                             }
@@ -119,7 +118,6 @@ function deleteUser(req, res) {
 function uploadImage(req, res) {
     let userId = req.params.id
     if (req.files) {
-        console.log('file>>>>>>>>>:', req.files);
 
         let file_split = req.files.image.path.split('\/')
         console.log(file_split);
