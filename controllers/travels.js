@@ -65,7 +65,7 @@ function updateTravel(req, res) {
     Travel.findByIdAndUpdate(travelId, update, { new: true }, (err, travelUpdated) => {
         if (err) return res.status(500).send({ message: 'Error in the request' })
         if (!travelUpdated) return res.status(404).send({ message: 'Travel could not be updated' })
-        return res.status(200).send({ data: travelUpdated })
+        return res.status(200).send({ message: 'Travel has been updated' })
     })
 }
 
